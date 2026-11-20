@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tracker KPI Buku</title>
+<style>
+:root{--bg:#f4f4f2;--card:#fff;--tx:#1b1b1a;--mut:#7b7b76;--ln:#e6e6e1;--ac:#fc4c02;--ok:#fc4c02;--fut:#ececE7;--bar:#ffc4a8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101010;--card:#1c1c1b;--tx:#f2f2ef;--mut:#9a9a94;--ln:#2e2e2c;--fut:#2a2a28;--bar:#6b2a10;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101010;--card:#1c1c1b;--tx:#f2f2ef;--mut:#9a9a94;--ln:#2e2e2c;--fut:#2a2a28;--bar:#6b2a10;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35}
+main{max-width:520px;margin:0 auto;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:center;margin:2px 0 12px}
+.top h1{font-size:19px;margin:0;font-weight:800;letter-spacing:-.01em}
+.top h1 span{color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:12px}
+.lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.row{display:flex;gap:10px;align-items:center}
+.ringw{position:relative;width:96px;height:96px;flex:none}
+.ringw svg{transform:rotate(-90deg)}
+.ringw .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ringw .c b{font-size:22px;line-height:1}.ringw .c span{font-size:11px;color:var(--mut)}
+.big{font-size:26px;font-weight:800;line-height:1.1}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.col{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mut)}
+.trk{position:relative;width:100%;height:64px;background:var(--fut);border-radius:6px;overflow:hidden}
+.trk i{position:absolute;left:0;right:0;bottom:0;background:var(--bar);border-radius:6px 6px 0 0}
+.trk i.ok{background:var(--ac)}
+.trk u{position:absolute;left:0;right:0;border-top:1px dashed var(--mut);opacity:.7}
+.col.t{color:var(--tx);font-weight:800}
+.bar{height:10px;background:var(--fut);border-radius:6px;overflow:hidden;margin:8px 0 6px}
+.bar>i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.stats .card{margin:0;padding:11px;text-align:center}
+.stats b{display:block;font-size:19px}.stats span{font-size:11px;color:var(--mut)}
+button{font:inherit;border:0;border-radius:8px;padding:11px 14px;background:var(--ac);color:#fff;cursor:pointer;font-weight:700}
+button.sec{background:var(--fut);color:var(--tx)}
+button.x{background:none;color:var(--mut);padding:4px 7px;font-weight:400}
+button.go{width:100%;font-size:17px;padding:15px;border-radius:10px}
+input{font:inherit;padding:9px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx);width:100%;min-width:0}
+label{font-size:11px;color:var(--mut);display:block;margin-bottom:3px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px}
+.wrow .n{width:104px;flex:none;color:var(--mut)}
+.wrow .b{flex:1;height:8px;background:var(--fut);border-radius:5px;overflow:hidden}
+.wrow .b i{display:block;height:100%;background:var(--bar)}
+.wrow .b i.ok{background:var(--ac)}
+.wrow .v{width:56px;text-align:right;font-weight:700}
+.act{border-top:1px solid var(--ln);padding:12px 0 2px}
+.act:first-of-type{border-top:0;padding-top:4px}
+.act .h{display:flex;gap:10px;align-items:center}
+.ava{width:38px;height:38px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.act .t{font-weight:700;font-size:15px}.act .s{font-size:12px;color:var(--mut)}
+.act .m{display:flex;gap:22px;margin:8px 0 4px 48px}
+.act .m b{display:block;font-size:20px}.act .m span{font-size:11px;color:var(--mut)}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--bar);margin:2px 4px 2px 0}
+.act .f{margin-left:48px;display:flex;justify-content:space-between;align-items:center}
+.ku{background:var(--fut);color:var(--tx);padding:5px 10px;font-weight:600;font-size:13px}
+.ku.on{background:var(--ac);color:#fff}
+details summary{cursor:pointer;font-weight:700}
+.mut{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><h1>📖 Buku<span>Log</span></h1><div class="mut" id="dayNo"></div></div>
+
+<div class="card">
+  <div class="lbl">Target minggu ini</div>
+  <div class="row" style="margin-top:8px">
+    <div class="ringw">
+      <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="40" fill="none" stroke="var(--fut)" stroke-width="10"/><circle id="ring" cx="48" cy="48" r="40" fill="none" stroke="var(--ac)" stroke-width="10" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" style="transition:stroke-dashoffset .4s"/></svg>
+      <div class="c"><b id="wPct">0%</b><span>minggu ini</span></div>
+    </div>
+    <div style="flex:1">
+      <div class="big"><span id="wSum">0</span><span style="font-size:15px;color:var(--mut);font-weight:600"> / <span id="wGoal">28</span> hlm</span></div>
+      <div class="mut" id="wMsg" style="margin-top:4px"></div>
+    </div>
+  </div>
+  <div class="week" id="week"></div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;align-items:baseline">
+    <div class="lbl">Hari ini</div><div class="mut"><b id="todayN" style="color:var(--tx)">0</b> / <span id="dailyT">4</span> hlm</div>
+  </div>
+  <button class="go" id="plus" style="margin:10px 0">+ Catat 1 halaman</button>
+  <div class="row" style="align-items:flex-end">
+    <div style="flex:1"><label for="fDate">Tanggal</label><input type="date" id="fDate"></div>
+    <div style="width:84px"><label for="fN">Halaman</label><input type="number" id="fN" min="0" inputmode="numeric"></div>
+    <button class="sec" id="save">Simpan</button>
+  </div>
+  <div class="row" style="margin-top:8px"><button class="sec" id="minus" style="padding:6px 12px">−1 hari ini</button></div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;align-items:baseline">
+    <div class="lbl">Progres buku</div><div style="font-weight:800" id="pct">0%</div>
+  </div>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="row" style="justify-content:space-between"><span class="mut"><b style="color:var(--tx)" id="written">0</b> / <span id="total">124</span> hlm</span><span id="status" style="font-weight:700;font-size:13px"></span></div>
+  <div class="mut" style="margin-top:6px">Proyeksi selesai: <b style="color:var(--tx)" id="proj">-</b> · Jika patuh: <b style="color:var(--tx)" id="plan">-</b></div>
+</div>
+
+<div class="stats">
+  <div class="card"><b id="streak">0</b><span>🔥 Streak hari</span></div>
+  <div class="card"><b id="bestD">0</b><span>🏆 Hari terbaik</span></div>
+  <div class="card"><b id="bestW">0</b><span>🏆 Minggu terbaik</span></div>
+</div>
+
+<div class="card">
+  <div class="lbl">Minggu ke minggu</div>
+  <div id="weeks" style="margin-top:6px"></div>
+</div>
+
+<div class="card">
+  <div class="lbl" style="margin-bottom:8px">Aktivitas</div>
+  <div id="feed"></div>
+</div>
+
+<div class="card">
+  <details open>
+    <summary>🎯 Target buku</summary>
+    <div class="g2" style="margin-top:10px">
+      <div><label for="sTotal">Target halaman</label><input type="number" id="sTotal" min="1" inputmode="numeric"></div>
+      <div><label for="sDl">Jumlah hari</label><input type="number" id="sDl" min="1" inputmode="numeric"></div>
+      <div><label for="sDaily">Target harian (hlm)</label><input type="number" id="sDaily" min="1" inputmode="numeric"></div>
+      <div><label for="sWeekly">Target mingguan (hlm)</label><input type="number" id="sWeekly" min="1" inputmode="numeric"></div>
+      <div><label for="sStart">Tanggal mulai</label><input type="date" id="sStart"></div>
+    </div>
+    <div class="mut" id="hint" style="margin-top:10px"></div>
+    <div class="mut" style="margin-top:4px;font-size:12px">Ubah halaman atau jumlah hari, maka target harian dihitung otomatis. Ubah target harian, maka jumlah hari menyesuaikan. Target mingguan bisa diatur sendiri.</div>
+    <div style="margin-top:10px"><button class="sec" id="reset">Hapus semua data</button></div>
+  </details>
+</div>
+</main>
+<script>
+(function(){
+var KEY="bookKPI_v1";
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function parse(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2])}
+function diff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
+function add(s,n){var d=parse(s);d.setDate(d.getDate()+n);return ymd(d)}
+function fmt(s){return parse(s).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}
+function fs(s){return parse(s).toLocaleDateString("id-ID",{day:"numeric",month:"short"})}
+function wday(s){return parse(s).toLocaleDateString("id-ID",{weekday:"long"})}
+function wk(s){return add(s,-((parse(s).getDay()+6)%7))}
+var today=ymd(new Date());
+var S={total:124,daily:4,weekly:28,dl:35,start:today,logs:{},kudos:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){S=Object.assign(S,o);if(!S.logs)S.logs={};if(!S.kudos)S.kudos={}}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var $=function(id){return document.getElementById(id)};
+function L(d){return S.logs[d]||0}
+function wsum(w){var t=0;for(var i=0;i<7;i++)t+=L(add(w,i));return t}
+function sum(){var t=0;for(var k in S.logs)t+=S.logs[k];return t}
+function streak(){var d=today,n=0;if(L(d)<S.daily)d=add(d,-1);while(L(d)>=S.daily&&n<4000){n++;d=add(d,-1)}return n}
+
+function render(){sync();
+  var w=sum(),T=S.total,D=S.daily,WG=S.weekly;
+  var gap0=diff(S.start,today),started=gap0>=0,dayNo=Math.max(1,gap0+1);
+  $("dayNo").textContent=started?"Hari ke-"+dayNo+" / "+S.dl:"Mulai "+fs(S.start);
+  /* weekly */
+  var ws=wk(today),wS=wsum(ws),idx=diff(ws,today),dl=7-idx;
+  var p=Math.min(1,wS/WG);
+  $("ring").style.strokeDashoffset=251.3*(1-p);
+  $("wPct").textContent=Math.round(wS/WG*100)+"%";
+  $("wSum").textContent=wS;$("wGoal").textContent=WG;
+  $("wMsg").textContent=wS>=WG?"🎉 Target mingguan tercapai!":"Sisa "+(WG-wS)+" hlm · butuh "+Math.ceil((WG-wS)/dl)+" hlm/hari ("+dl+" hari lagi)";
+  var mx=D*2;for(var i=0;i<7;i++)mx=Math.max(mx,L(add(ws,i)));
+  var h="",nm=["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+  for(i=0;i<7;i++){var dt=add(ws,i),v=L(dt);
+    h+='<div class="col'+(dt===today?" t":"")+'"><div>'+(v||"")+'</div><div class="trk"><u style="bottom:'+(D/mx*100)+'%"></u><i class="'+(v>=D?"ok":"")+'" style="height:'+(v/mx*100)+'%"></i></div>'+nm[i]+'</div>'}
+  $("week").innerHTML=h;
+  /* today */
+  $("todayN").textContent=L(today);$("dailyT").textContent=D;
+  /* book */
+  var pct=Math.min(100,Math.round(w/T*100));
+  $("pct").textContent=pct+"%";$("fill").style.width=pct+"%";
+  $("written").textContent=w;$("total").textContent=T;
+  var exp=started?Math.min(T,dayNo*D):0,gap=w-exp,st=$("status");
+  if(w>=T){st.textContent="🎉 Selesai!";st.style.color="var(--ac)"}
+  else if(!started){st.textContent="";}
+  else if(gap>=0){st.textContent=gap?"Di depan "+gap+" hlm":"Sesuai target";st.style.color="var(--ac)"}
+  else{st.textContent="Tertinggal "+(-gap)+" hlm";st.style.color="var(--mut)"}
+  var rem=Math.max(0,T-w),avg=started?w/dayNo:0;
+  $("proj").textContent=rem===0?"Selesai":(avg>0?fs(add(today,Math.ceil(rem/avg))):"-");
+  $("plan").textContent=fs(add(S.start,Math.ceil(T/D)-1));
+  /* records */
+  var bd=0,k,keys=Object.keys(S.logs);
+  keys.forEach(function(k){bd=Math.max(bd,S.logs[k])});
+  var first=keys.length?keys.slice().sort()[0]:today,bw=0,x=wk(first<S.start?first:S.start);
+  while(diff(x,today)>=0){bw=Math.max(bw,wsum(x));x=add(x,7)}
+  $("streak").textContent=streak();$("bestD").textContent=bd;$("bestW").textContent=bw;
+  /* weeks list */
+  var wh="",x2=ws,c=0,wfirst=wk(first<S.start?first:S.start);
+  while(diff(wfirst,x2)>=0&&c<8){var s=wsum(x2),q=Math.min(100,s/WG*100);
+    wh+='<div class="wrow"><span class="n">'+fs(x2)+" – "+fs(add(x2,6))+'</span><span class="b"><i class="'+(s>=WG?"ok":"")+'" style="width:'+q+'%"></i></span><span class="v">'+s+(s>=WG?" ✓":"")+'</span></div>';
+    x2=add(x2,-7);c++}
+  $("weeks").innerHTML=wh;
+  /* feed */
+  var fh="";
+  keys.sort().reverse().forEach(function(d){var v=S.logs[d],extra=v-D;
+    fh+='<div class="act"><div class="h"><div class="ava">✍️</div><div style="flex:1"><div class="t">Menulis '+v+' halaman</div><div class="s">'+wday(d)+", "+fmt(d)+'</div></div><button class="x" data-del="'+d+'" aria-label="Hapus">✕</button></div>'
+    +'<div class="m"><div><b>'+v+'</b><span>Halaman</span></div><div><b>'+Math.round(v/D*100)+'%</b><span>Dari target</span></div></div>'
+    +'<div class="f"><div>'+(v>=D?'<span class="chip">🎯 Target harian</span>':"")+(extra>0?'<span class="chip">+'+extra+' bonus</span>':"")+(v===bd&&v>0?'<span class="chip">🏆 Rekor</span>':"")+'</div><button class="ku'+(S.kudos[d]?" on":"")+'" data-k="'+d+'">👏 Kudos</button></div></div>'});
+  $("feed").innerHTML=fh||'<div class="mut">Belum ada aktivitas. Catat halaman pertamamu!</div>';
+}
+function setLog(d,n){
+  n=Math.max(0,Math.round(n)||0);
+  if(!d||d>today)return;
+  if(d<S.start){S.start=d;$("sStart").value=d}
+  if(n===0)delete S.logs[d];else S.logs[d]=n;
+  save();render()}
+$("plus").onclick=function(){setLog(today,L(today)+1)};
+$("minus").onclick=function(){setLog(today,L(today)-1)};
+$("save").onclick=function(){var n=parseInt($("fN").value,10);if(isNaN(n))return;setLog($("fDate").value||today,n);$("fN").value=""};
+$("feed").onclick=function(e){var t=e.target,d=t.getAttribute&&t.getAttribute("data-del"),k=t.getAttribute&&t.getAttribute("data-k");
+  if(d){delete S.logs[d];delete S.kudos[d];save();render()}
+  else if(k){if(S.kudos[k])delete S.kudos[k];else S.kudos[k]=1;save();render()}};
+function init(){today=ymd(new Date());$("fDate").max=today;if(!$("fDate").value||$("fDate").value>today)$("fDate").value=today}
+$("sTotal").value=S.total;$("sDaily").value=S.daily;$("sWeekly").value=S.weekly;$("sDl").value=S.dl;$("sStart").value=S.start;
+function bind(id,key,num){$(id).onchange=function(){var v=$(id).value;if(num){v=parseInt(v,10);if(!(v>0)){$(id).value=S[key];return}}else if(!v||v>today){$(id).value=S[key];return}S[key]=v;save();render()}}
+function sync(){$("sTotal").value=S.total;$("sDaily").value=S.daily;$("sWeekly").value=S.weekly;$("sDl").value=S.dl;$("sStart").value=S.start;$("hint").textContent="Selesai "+fmt(add(S.start,S.dl-1))+" jika menulis "+S.daily+" hlm/hari ("+S.total+" hlm dalam "+S.dl+" hari)."}
+function num(id,fn){$(id).onchange=function(){var v=parseInt($(id).value,10);if(!(v>0)){sync();return}fn(v);save();render()}}
+num("sTotal",function(v){S.total=v;S.daily=Math.max(1,Math.ceil(v/S.dl));S.weekly=S.daily*7});
+num("sDl",function(v){S.dl=v;S.daily=Math.max(1,Math.ceil(S.total/v));S.weekly=S.daily*7});
+num("sDaily",function(v){S.daily=v;S.dl=Math.ceil(S.total/v);S.weekly=v*7});
+num("sWeekly",function(v){S.weekly=v});
+$("sStart").onchange=function(){var v=$("sStart").value;if(!v||v>today){sync();return}S.start=v;save();render()};
+$("reset").onclick=function(){if(confirm("Hapus semua catatan?")){S.logs={};S.kudos={};save();render()}};
+document.addEventListener("visibilitychange",function(){if(!document.hidden){var t=ymd(new Date());if(t!==today){init();render()}}});
+init();render();
+})();
+</script>
+</body>
+</html>
